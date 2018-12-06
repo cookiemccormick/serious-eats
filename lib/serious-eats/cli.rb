@@ -23,7 +23,9 @@ module SeriousEats
       if input >= 1 && input <= Recipe.all.count
         recipe = SeriousEats::Recipe.find(input)
 
-        @scraper.fetch_recipe_data(recipe)
+        if !recipe.has_data?
+          @scraper.fetch_recipe_data(recipe)
+        end
 
         print_recipe(recipe)
 
@@ -45,6 +47,7 @@ module SeriousEats
       else
         invalid_message
       end
+
     end
 
     def invalid_message

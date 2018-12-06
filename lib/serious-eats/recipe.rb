@@ -25,5 +25,9 @@ module SeriousEats
     def self.find(id)
       self.all[id - 1]
     end
+
+    def has_data?
+      !!description
+    end
   end
 end
