@@ -1,5 +1,3 @@
-require "serious-eats/version"
-
 module SeriousEats
   class Recipe
     attr_accessor :name
@@ -8,23 +6,28 @@ module SeriousEats
 
     attr_accessor :description
     attr_accessor :portion
-    attr_accessor :cooking_time
-    attr_accessor :prep_time
+    attr_accessor :active_time
+    attr_accessor :total_time
     attr_accessor :rating
     attr_accessor :ingredients
-    attr_accessor :instructions
+    attr_accessor :directions
 
     @@all = []
 
-    def initialize(name, url, category)
-      @name = name
-      @url = url
-      @category = category
+    def initialize(attributes = {})
+      attributes.each do |key, value|
+        self.send("#{key}=", value)
+      end
+
       @@all << self
     end
 
     def self.all
       @@all
+    end
+
+    def self.find(id)
+      self.all[id - 1]
     end
   end
 end

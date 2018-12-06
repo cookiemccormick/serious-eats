@@ -1,6 +1,6 @@
 # SeriousEats
 
-
+This Ruby Gem provides a CLI to view Serious Eats Recipes.
 
 ## Installation
 
@@ -20,7 +20,9 @@ Or install it yourself as:
 
 ## Usage
 
+Type the below and follow the on screen prompts.
 
+    $ serious-eats
 
 ## Development
 
