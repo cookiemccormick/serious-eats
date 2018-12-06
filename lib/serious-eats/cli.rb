@@ -5,7 +5,7 @@ module SeriousEats
       puts "Hello there! Welcome to the Serious Eats Recipes!".colorize(:green).bold
 
       @scraper = SeriousEats::Scraper.new
-      recipes = @scraper.make_recipes
+      @scraper.fetch_recipes
 
       start
     end
@@ -19,33 +19,44 @@ module SeriousEats
       puts ""
 
       input = gets.strip.to_i
-      if input >= 1 && input <= 24
+
+      if input >= 1 && input <= Recipe.all.count
         recipe = SeriousEats::Recipe.find(input)
-        @scraper.make_attributes(recipe)
+
+        @scraper.fetch_recipe_data(recipe)
+
         print_recipe(recipe)
+
         puts ""
         puts "Would you like to see another recipe? Please enter Y or N.".bold
         puts ""
+
         input = gets.strip.downcase
 
         if input == "y"
-         puts ""
-         start
-        elsif input == "n"
-         puts ""
-          puts "Thank you! Goodbye!".bold
           puts ""
-        else
-          puts ""
-          puts "PLEASE ENTER A VALID RESPONSE.".colorize(:red).blink
           start
+        elsif input == "n"
+          goodbye_message
+        else
+          invalid_message
         end
 
       else
-        puts ""
-        puts "PLEASE ENTER A VALID RESPONSE.".colorize(:red).blink
-        start
+        invalid_message
       end
+    end
+
+    def invalid_message
+      puts ""
+      puts "PLEASE ENTER A VALID RESPONSE.".colorize(:red).blink
+      start
+    end
+
+    def goodbye_message
+      puts ""
+      puts "Thank you! Goodbye!".bold
+      puts ""
     end
 
     def display_recipes
@@ -71,7 +82,7 @@ module SeriousEats
       puts "#{recipe.total_time}"
       puts ""
 
-      if recipe.rating == ""
+      if recipe.rating == 0
         puts "Rating: N/A".bold
       else
         puts "Rating out of 5:".bold

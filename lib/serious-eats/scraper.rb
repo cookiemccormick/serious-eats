@@ -1,15 +1,21 @@
 module SeriousEats
   class Scraper
-    def get_index_page
-      Nokogiri::HTML(open("https://www.seriouseats.com/the-food-lab/recipes"))
+    INDEX_URL = "https://www.seriouseats.com/the-food-lab/recipes"
+
+    def parse_url(url)
+      Nokogiri::HTML(open(url))
     end
 
     def get_recipes
-      self.get_index_page.css("#recipes .module")
+      parse_url(INDEX_URL).css("#recipes .module")
     end
 
-    def make_recipes
-      self.get_recipes.map do |block|
+    def get_recipe_data(recipe)
+      parse_url(recipe.url).css("div.recipe-body")
+    end
+
+    def fetch_recipes
+      get_recipes.map do |block|
         recipe = Recipe.new
         recipe.name = block.css("h4.title").text.strip
         recipe.category = block.css("a.category-link").text.strip
@@ -18,16 +24,8 @@ module SeriousEats
       end
     end
 
-    def get_show_page(recipe)
-      Nokogiri::HTML(open(recipe.url))
-    end
-
-    def get_attributes(recipe)
-      self.get_show_page(recipe).css("div.recipe-body")
-    end
-
-    def make_attributes(recipe)
-      self.get_attributes(recipe).map do |block|
+    def fetch_recipe_data(recipe)
+      get_recipe_data(recipe).map do |block|
         recipe.description = block.css(".recipe-introduction-body p:not(.caption)").text.strip
         recipe.portion = block.css("span.info.yield").text.strip
         recipe.active_time = block.css("ul.recipe-about li:nth-child(2) span.info").text.strip
