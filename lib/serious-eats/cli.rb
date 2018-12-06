@@ -68,9 +68,11 @@ module SeriousEats
     def print_recipe(recipe)
       puts ""
       puts "#{recipe.name.upcase} - #{recipe.category.upcase}".colorize(:green).bold
+
       puts ""
       puts "Description:".bold
-      puts "#{recipe.description}"
+      puts recipe.description.join("\n\n")
+
       puts ""
       puts "Portion:".bold
       puts "#{recipe.portion}"

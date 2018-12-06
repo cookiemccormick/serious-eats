@@ -26,7 +26,13 @@ module SeriousEats
 
     def fetch_recipe_data(recipe)
       get_recipe_data(recipe).map do |block|
-        recipe.description = block.css(".recipe-introduction-body p:not(.caption)").text.strip
+        recipe.description = block.css(".recipe-introduction-body p:not(.caption)").map do |description|
+          description.text.strip
+        end.select do |description|
+          # some recipes have some empty <p> tags that need to be filtered out
+          description.length > 0
+        end
+
         recipe.portion = block.css("span.info.yield").text.strip
         recipe.active_time = block.css("ul.recipe-about li:nth-child(2) span.info").text.strip
         recipe.total_time = block.css("ul.recipe-about li:nth-child(3) span.info").text.strip
@@ -42,8 +48,8 @@ module SeriousEats
           text
         end
 
-        recipe.directions = block.css(".recipe-procedure-text").map do |procedure|
-          procedure.text.strip
+        recipe.directions = block.css(".recipe-procedure-text").map do |direction|
+          direction.text.strip
         end
       end
     end
