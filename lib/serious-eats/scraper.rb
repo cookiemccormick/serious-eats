@@ -35,7 +35,13 @@ module SeriousEats
         recipe.rating = block.css("span.info.rating-value").text.strip
 
         recipe.ingredients = block.css("li.ingredient").map do |ingredient|
-          ingredient.text.strip
+          text = ingredient.text.strip
+
+          if ingredient.css("strong").any?
+            text = "\n#{text.underline}"
+          end
+
+          text
         end
 
         recipe.directions = block.css(".recipe-procedure-text").map do |procedure|
