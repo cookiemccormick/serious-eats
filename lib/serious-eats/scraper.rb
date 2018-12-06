@@ -32,7 +32,7 @@ module SeriousEats
         recipe.portion = block.css("span.info.yield").text.strip
         recipe.active_time = block.css("ul.recipe-about li:nth-child(2) span.info").text.strip
         recipe.total_time = block.css("ul.recipe-about li:nth-child(3) span.info").text.strip
-        recipe.rating = block.css("span.info.rating-value").text.strip
+        recipe.rating = block.css("span.info.rating-value").text.strip.to_f.round(1)
 
         recipe.ingredients = block.css("li.ingredient").map do |ingredient|
           text = ingredient.text.strip
